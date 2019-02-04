@@ -13,9 +13,10 @@
 #include "get_next_line.h"
 #include <stdio.h>
 
-char	*ft_strjoinSpecial(char const *s1, char const *s2)
+char	*ft_strjoinSpecial(char const *s1, char *s2)
 {
 	char	*new;
+	char 	*temp;
 	int		i;
 	int		j;
 
@@ -37,33 +38,21 @@ char	*ft_strjoinSpecial(char const *s1, char const *s2)
 			i++;
 		}
 		new[i] = '\0';
+		j++;
+		i = 0;
+		if (!(temp = malloc(sizeof(char) * (ft_strlen(s2) - j + 1))))
+			return (NULL);
+		while(s2[j] != '\0')
+		{
+			temp[i] = s2[j];
+			i++;
+			j++;
+		}
+		ft_strcpy(s2, temp);
 		return (new);
 	}
 	return (NULL);
 }
-
-char	*ft_strcpyuntilendofline (char *dest, const char *src)
-{
-	size_t i;
-	size_t j;
-
-	i = 0;
-	j = 0;
-	while (src[i] != '\0' &&& src[i] != '\n')
-		i++;
-	j = i;
-	while(src[j])
-		j++;
-	dest = ft_strnew(j);
-	while (src[i] != '\0')
-	{
-		dest[i] = src[i];
-		i++;
-	}
-	dest[i] = '\0';
-	return (dest);
-}
-
 
 int		get_next_line(const int fd, char **line)
 {
@@ -110,8 +99,8 @@ int		get_next_line(const int fd, char **line)
 			return (0);
 	}
 	*line = ft_strjoinSpecial(*line, repere);
-	printf("LINE : %s", *line);
-	//ft_putstr(*line);
+	//printf("LINE : %s", *line);
+	ft_putstr(*line);
 	if (ret > 0)	
 		return (1);
 	else if (ret == -1)
