@@ -13,7 +13,7 @@
 #include "get_next_line.h"
 #include <stdio.h>
 
-char	*ft_strjoinSpecial(char const *s1, char *s2)
+void	ft_strjoinSpecial(char *s1, char *s2)
 {
 	char	*new;
 	char 	*temp;
@@ -25,7 +25,7 @@ char	*ft_strjoinSpecial(char const *s1, char *s2)
 	if (s1 && s2)
 	{
 		if (!(new = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1))))
-			return (NULL);
+			return ;
 		while (s1[i] != '\0')
 		{
 			new[i] = s1[i];
@@ -41,7 +41,7 @@ char	*ft_strjoinSpecial(char const *s1, char *s2)
 		j++;
 		i = 0;
 		if (!(temp = malloc(sizeof(char) * (ft_strlen(s2) - j + 1))))
-			return (NULL);
+			return ;
 		while(s2[j] != '\0')
 		{
 			temp[i] = s2[j];
@@ -49,9 +49,9 @@ char	*ft_strjoinSpecial(char const *s1, char *s2)
 			j++;
 		}
 		ft_strcpy(s2, temp);
-		return (new);
+		ft_strcpy(s1, new);
 	}
-	return (NULL);
+	return ;
 }
 
 int		get_next_line(const int fd, char **line)
@@ -98,7 +98,7 @@ int		get_next_line(const int fd, char **line)
 		if (!(*line = ft_memalloc(sizeof(char *) * BUFF_SIZE + 1)))
 			return (0);
 	}
-	*line = ft_strjoinSpecial(*line, repere);
+	ft_strjoinSpecial(*line, repere);
 	//printf("LINE : %s", *line);
 	ft_putstr(*line);
 	if (ret > 0)	
