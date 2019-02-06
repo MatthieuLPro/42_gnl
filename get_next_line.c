@@ -50,14 +50,18 @@ char	*ft_strfirstline(char const *s1)
 	j = 0;
 	if (s1)
 	{
-		if (!(new = malloc(sizeof(char) * (ft_strlenline(s1) + 1))))
+		if (!(new = ft_strnew(ft_strlenline(s1))))
 			return (NULL);
-		while (s1[i] != '\n' && s1[i])
+		while (s1[i + 1] != '\n' && s1[i])
 		{
 			new[i] = s1[i];
 			i++;
+		};	
+		while(i < ft_strlenline(s1) + 1)
+		{
+			new[i] = '\0';
+			i++;
 		}
-		new[i] = '\0';
 		if (new[0] == '\0')
 			return (NULL);
 		return (new);
@@ -73,7 +77,9 @@ char	*ft_strafterfirstline(char *s1)
 	i = 0;
 	if (s1)
 	{
-		if (!(new = malloc(sizeof(char) * (ft_strlenafterfirstline(s1) + 1))))
+		//if (!(new = malloc(sizeof(char) * (ft_strlenafterfirstline(s1) + 1))))
+		//	return (NULL);
+		if (!(new = ft_strnew(ft_strlenafterfirstline(s1))))
 			return (NULL);
 		while(*s1 != '\n' && *s1 != '\0')
 			s1++;
@@ -124,8 +130,8 @@ int		get_next_line(const int fd, char **line, size_t buff_size)
 		repere = ft_strjoin(repere, buff);
 	}
 	// Free buff if exist
-	if (ret < buff_size && ret > 0)
-		repere = ft_strjoin(repere, buff);
+	//if (ret < buff_size && ret > 0)
+	//	repere = ft_strjoin(repere, buff);
 	if (buff)
 	{
 		free(buff);
@@ -171,7 +177,7 @@ int		main(void)
 	}
 	close(fd);
 */
-	my_size = 10;
+	my_size = 100;
 	fd = open("test.txt", O_RDONLY);
 	ret = 1;
 	while (ret)
@@ -208,6 +214,6 @@ int		main(void)
 		ret = get_next_line(fd, &line, my_size);
 		ft_putchar('\n');
 	}
-	close(fd); */
+	close(fd);*/
 	return (0);
 }
