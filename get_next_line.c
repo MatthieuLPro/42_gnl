@@ -114,6 +114,8 @@ int		get_next_line(const int fd, char **line)
 	while ((ret = read(fd, buff, BUFF_SIZE)))
 	{
 		// if \n exist in buff OR EOF cp and break
+		if (ret == -1)
+			return (-1);
 		if (ft_strchr(buff, '\n') != NULL || ret < BUFF_SIZE)
 		{
 			repere = ft_strjoin(repere, buff);
