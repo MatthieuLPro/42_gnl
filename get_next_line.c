@@ -11,14 +11,13 @@
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
 
 size_t	ft_strlenline(const char *s1)
 {
 	size_t i;
 
 	i = 0;
-	while(s1[i] != '\n' && s1[i] != '\0')
+	while (s1[i] != '\n' && s1[i])
 		i++;
 	return (i);
 }
@@ -30,10 +29,10 @@ size_t	ft_strlenafterfirstline(const char *s1)
 	i = 0;
 	if (s1)
 	{	
-		while(s1[i] != '\n' && s1[i])
+		while (s1[i] != '\n' && s1[i])
 			i++;
 		i++;
-		while(s1[i] != '\0')
+		while (s1[i] != '\0')
 			i++;
 		return (i);
 	}
@@ -43,11 +42,9 @@ size_t	ft_strlenafterfirstline(const char *s1)
 char	*ft_strfirstline(char const *s1)
 {
 	char	*new;
-	int		i;
-	int		j;
+	size_t	i;
 
 	i = 0;
-	j = 0;
 	if (s1)
 	{
 		if (!(new = ft_strnew(ft_strlenline(s1))))
@@ -57,7 +54,7 @@ char	*ft_strfirstline(char const *s1)
 			new[i] = s1[i];
 			i++;
 		};	
-		while(i < ft_strlenline(s1) + 1)
+		while (i < ft_strlenline(s1) + 1)
 		{
 			new[i] = '\0';
 			i++;
@@ -77,11 +74,9 @@ char	*ft_strafterfirstline(char *s1)
 	i = 0;
 	if (s1)
 	{
-		//if (!(new = malloc(sizeof(char) * (ft_strlenafterfirstline(s1) + 1))))
-		//	return (NULL);
 		if (!(new = ft_strnew(ft_strlenafterfirstline(s1))))
 			return (NULL);
-		while(*s1 != '\n' && *s1 != '\0')
+		while (*s1 != '\n' && *s1 != '\0')
 			s1++;
 		s1++;
 		while (*s1 != '\0')
@@ -117,7 +112,7 @@ int		get_next_line(const int fd, char **line)
 	free(*line);
 	*line = NULL;
 	// read and cp in buff
-	while(ret = read(fd, buff, BUFF_SIZE))
+	while ((ret = read(fd, buff, BUFF_SIZE)))
 	{
 		// if \n exist in buff OR EOF cp and break
 		if (ft_strchr(buff, '\n') != NULL || ret < BUFF_SIZE)
@@ -148,22 +143,4 @@ int		get_next_line(const int fd, char **line)
 		return (-1);
 	else
 		return (0);
-}
-
-int		main(void)
-{
-	int		fd = open("test.txt", O_RDONLY);
-	char	*line = NULL;
-	int		ret;
-	size_t	my_size;
-
-	fd = open("test.txt", O_RDONLY);
-	ret = 1;
-	while (ret)
-	{
-		ret = get_next_line(fd, &line);
-		ft_putchar('\n');
-	}
-	close(fd);
-	return (0);
 }
