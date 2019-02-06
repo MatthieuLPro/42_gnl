@@ -153,28 +153,26 @@ char	*ft_strfirstline(char const *s1)
 	return (NULL);
 }
 
-char	*ft_strafterfirstline(char const *s1)
+char	*ft_strafterfirstline(char *s1)
 {
 	char	*new;
 	int		i;
-	int 	j;
 
 	i = 0;
-	j = 0;
 	if (s1)
 	{
 		if (!(new = malloc(sizeof(char) * (ft_strlenafterfirstline(s1) + 1))))
 			return (NULL);
-		while(s1[i] != '\n' && s1[i] != '\0')
-			i++;
-		i++;
-		while (s1[i] != '\0')
+		while(*s1 != '\n' && *s1 != '\0')
+			s1++;
+		s1++;
+		while (*s1 != '\0')
 		{
-			new[j] = s1[i];
+			new[i] = *s1;
+			s1++;
 			i++;
-			j++;
 		}
-		new[j] = '\0';
+		new[i] = '\0';
 		return (new);
 	}
 	return (NULL);
@@ -198,6 +196,8 @@ int		get_next_line(const int fd, char **line, size_t buff_size)
 		if (!(repere = ft_memalloc(sizeof(char *) * buff_size + 1)))
 			return (-1);
 	}
+	free(*line);
+	*line = NULL;
 	/*else // IF repere NOT NULL 
 	{
 		free(*line);
@@ -210,12 +210,12 @@ int		get_next_line(const int fd, char **line, size_t buff_size)
 			repere = ft_strcleanfirstline(repere, ft_strlenlineafter(repere));
 	}*/
 	// read and cp in buff
-	while(ret)
+	while(ret = read(fd, buff, buff_size))
 	{
-		if (!(ret = read(fd, buff, buff_size)))
-			break ;
 		// if \n exist in buff OR EOF cp and break
-		if (ft_strchr(buff, '\n') != NULL || ret == 0)
+		if (ret < buff_size)
+			break ;
+		if (ft_strchr(buff, '\n') != NULL)
 		{
 			repere = ft_strjoin(repere, buff);
 			break ;
@@ -223,6 +223,8 @@ int		get_next_line(const int fd, char **line, size_t buff_size)
 		repere = ft_strjoin(repere, buff);
 	}
 	// Free buff if exist
+	if (ret < buff_size && ret > 0)
+		repere = ft_strjoin(repere, buff);
 	if (buff)
 	{
 		free(buff);
@@ -259,6 +261,7 @@ int		get_next_line(const int fd, char **line, size_t buff_size)
 	//printf("ret : %d\n", ret);
 	//printf("line : %s repere : %s - ", *line, repere);
 	ft_putstr(*line);
+	//printf("%d - ", ret);
 	//printf("repere: %s - ",repere);
 	if (ret > 0 || repere)
 		return (1);
@@ -293,7 +296,7 @@ int		main(void)
 	}
 	close(fd);
 
-*/	my_size = 10;
+	my_size = 10;
 	fd = open("test.txt", O_RDONLY);
 	ret = 1;
 	while (ret == 1)
@@ -303,7 +306,7 @@ int		main(void)
 	}
 	close(fd);
 
-/*	my_size = 100;
+*/	my_size = 100;
 	fd = open("test.txt", O_RDONLY);
 	ret = 1;
 	while (ret == 1)
@@ -312,7 +315,7 @@ int		main(void)
 		ft_putchar('\n');
 	}
 	close(fd);
-
+/*
 	my_size = 1000;
 	fd = open("test.txt", O_RDONLY);
 	ret = 1;
