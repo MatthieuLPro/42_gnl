@@ -49,7 +49,7 @@ char	*ft_strfirstline(char const *s1)
 	{
 		if (!(new = ft_strnew(ft_strlenline(s1))))
 			return (NULL);
-		while (s1[i + 1] != '\n' && s1[i])
+		while (s1[i] != '\n' && s1[i])
 		{
 			new[i] = s1[i];
 			i++;
@@ -99,7 +99,6 @@ int		get_next_line(const int fd, char **line)
 	int				ret;
 	char			*buff;
 
-	ret = 1;
 	// init buff
 	if (!(buff = ft_memalloc(sizeof(char *) * BUFF_SIZE + 1)))
 		return (-1);
@@ -133,9 +132,7 @@ int		get_next_line(const int fd, char **line)
 	*line = ft_strfirstline(repere);
 	if (ft_strafterfirstline(repere))
 		repere = ft_strafterfirstline(repere);
-	if (*line != NULL)	
-		ft_putstr(*line);
-	else
+	if (!*line)	
 		return (0);
 	if (ret > 0 || repere)
 		return (1);
