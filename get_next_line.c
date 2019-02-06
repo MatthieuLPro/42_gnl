@@ -113,7 +113,7 @@ char	*ft_strjoinSpecial(char const *s1, char const *s2)
 			new[i] = s1[i];
 			i++;
 		}
-		while (s2[j] != '\n')
+		while (s2[j] != ' ' && s2[j])
 		{
 			new[i] = s2[j];
 			j++;
@@ -205,8 +205,8 @@ int		main(void)
 		printf("\n");
 	}
 	close(fd);
-*/
-	my_size = 100;
+
+	my_size = 10;
 	fd = open("test.txt", O_RDONLY);
 	ret = 1;
 	while (ret)
@@ -215,26 +215,27 @@ int		main(void)
 		printf("\n");
 	}
 	close(fd);
-/*
+
 	my_size = 100;
 	fd = open("test.txt", O_RDONLY);
 	ret = 1;
 	while (ret)
 	{
 		ret = get_next_line(fd, &line, my_size);
+		ft_putchar('\n');
 	}
 	close(fd);
-
-	my_size = 1000;
+*/
+	my_size = 403;
 	fd = open("test.txt", O_RDONLY);
 	ret = 1;
-	while (ret == 1)
+	while (ret)
 	{
 		ret = get_next_line(fd, &line, my_size);
 		ft_putchar('\n');
 	}
 	close(fd);
-
+/*
 	my_size = 10000;
 	fd = open("test.txt", O_RDONLY);
 	ret = 1;
