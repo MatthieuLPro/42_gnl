@@ -13,16 +13,6 @@
 #include "get_next_line.h"
 #include <stdio.h>
 
-size_t	ft_strlenline(const char *s1)
-{
-	size_t i;
-
-	i = 0;
-	while(s1[i] != '\n' && s1[i] != '\0')
-		i++;
-	return (i);
-}
-
 size_t	ft_strlenlineafter(const char *s1)
 {
 	size_t i;
@@ -98,6 +88,7 @@ char	*ft_strjoinline(char const *s1, char const *s2)
 			new[i] = s1[i];
 			i++;
 		}
+		printf("newBEFORE : %s - ", new);
 		while (s2[j] != '\0' && s2[j] != '\n')
 		{
 			new[i] = s2[j];
@@ -110,6 +101,86 @@ char	*ft_strjoinline(char const *s1, char const *s2)
 	}
 	return (NULL);
 }
+/////////////////////// NEW ////////////////////////////
+
+size_t	ft_strlenline(const char *s1)
+{
+	size_t i;
+
+	i = 0;
+	while(s1[i] != '\n' && s1[i] != '\0')
+		i++;
+	return (i);
+}
+
+size_t	ft_strlenafterfirstline(const char *s1)
+{
+	size_t i;
+
+	i = 0;
+	if (s1)
+	{	
+		while(s1[i] != '\n' && s1[i])
+			i++;
+		i++;
+		while(s1[i] != '\0')
+			i++;
+		return (i);
+	}
+	return (0);
+}
+
+char	*ft_strfirstline(char const *s1)
+{
+	char	*new;
+	int		i;
+	int		j;
+
+	i = 0;
+	j = 0;
+	if (s1)
+	{
+		if (!(new = malloc(sizeof(char) * (ft_strlenline(s1) + 1))))
+			return (NULL);
+		while (s1[i] != '\n')
+		{
+			new[i] = s1[i];
+			i++;
+		}
+		new[i] = '\0';
+		return (new);
+	}
+	return (NULL);
+}
+
+char	*ft_strafterfirstline(char const *s1)
+{
+	char	*new;
+	int		i;
+	int 	j;
+
+	i = 0;
+	j = 0;
+	if (s1)
+	{
+		if (!(new = malloc(sizeof(char) * (ft_strlenafterfirstline(s1) + 1))))
+			return (NULL);
+		while(s1[i] != '\n' && s1[i] != '\0')
+			i++;
+		i++;
+		while (s1[i] != '\0')
+		{
+			new[j] = s1[i];
+			i++;
+			j++;
+		}
+		new[j] = '\0';
+		return (new);
+	}
+	return (NULL);
+}
+
+////////////////////////////////////////////////////////////////
 
 int		get_next_line(const int fd, char **line, size_t buff_size)
 {
@@ -127,7 +198,7 @@ int		get_next_line(const int fd, char **line, size_t buff_size)
 		if (!(repere = ft_memalloc(sizeof(char *) * buff_size + 1)))
 			return (-1);
 	}
-	else // IF repere NOT NULL 
+	/*else // IF repere NOT NULL 
 	{
 		free(*line);
 		*line = NULL;
@@ -137,7 +208,7 @@ int		get_next_line(const int fd, char **line, size_t buff_size)
 		//printf("lineBefore : %s - ", *line);
 		if (ft_strcleanfirstline(repere, ft_strlenlineafter(repere)))
 			repere = ft_strcleanfirstline(repere, ft_strlenlineafter(repere));
-	}
+	}*/
 	// read and cp in buff
 	while(ret)
 	{
@@ -157,9 +228,14 @@ int		get_next_line(const int fd, char **line, size_t buff_size)
 		free(buff);
 		buff = NULL;
 	}
+	*line = ft_strfirstline(repere);
+	repere = ft_strafterfirstline(repere);
+	//printf("line : %s - repere: %s\n", *line, repere);
+	//printf("==================================");
 	//free(*line);
 	//*line = NULL;
 	//printf("repere : %s - line repere : %ld\n", repere, ft_strlenline(repere));
+	/*
 	if (*line == NULL)
 	{
 		// cpy repere into line (until \n) destroy first line of repere
@@ -176,15 +252,15 @@ int		get_next_line(const int fd, char **line, size_t buff_size)
 		*line = ft_strjoinline(*line, repere);
 		if (ft_strcleanfirstline(repere, ft_strlenlineafter(repere)))
 			repere = ft_strcleanfirstline(repere, ft_strlenlineafter(repere));
-	}
+	}*/
 	//printf("repere : %s - ", repere);
 	//*line = ft_strjoinSpecial(*line, repere);
 	//printf("LINE : %s", *line);
 	//printf("ret : %d\n", ret);
 	//printf("line : %s repere : %s - ", *line, repere);
-	//ft_putstr(*line);
+	ft_putstr(*line);
 	//printf("repere: %s - ",repere);
-	if (ret > 0)	
+	if (ret > 0 || repere)
 		return (1);
 	else if (ret == -1)
 		return (-1);
