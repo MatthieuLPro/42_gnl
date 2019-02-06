@@ -96,6 +96,35 @@ char	*ft_strafterfirstline(char *s1)
 	return (NULL);
 }
 
+char	*ft_strjoinSpecial(char const *s1, char const *s2)
+{
+	char	*new;
+	int		i;
+	int		j;
+
+	i = 0;
+	j = 0;
+	if (s1 && s2)
+	{
+		if (!(new = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1))))
+			return (NULL);
+		while (s1[i] != '\0')
+		{
+			new[i] = s1[i];
+			i++;
+		}
+		while (s2[j] != '\n')
+		{
+			new[i] = s2[j];
+			j++;
+			i++;
+		}
+		new[i] = '\0';
+		return (new);
+	}
+	return (NULL);
+}
+
 ////////////////////////////////////////////////////////////////
 
 int		get_next_line(const int fd, char **line, size_t buff_size)
@@ -130,8 +159,8 @@ int		get_next_line(const int fd, char **line, size_t buff_size)
 		repere = ft_strjoin(repere, buff);
 	}
 	// Free buff if exist
-	//if (ret < buff_size && ret > 0)
-	//	repere = ft_strjoin(repere, buff);
+	if (ret < buff_size && ret > 0)
+		repere = ft_strjoinSpecial(repere, buff);
 	if (buff)
 	{
 		free(buff);
