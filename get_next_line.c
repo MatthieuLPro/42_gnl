@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <stdio.h>
 
 size_t	ft_strlenline(const char *s1)
 {
@@ -142,4 +143,22 @@ int		get_next_line(const int fd, char **line)
 		return (-1);
 	else
 		return (0);
+}
+
+int		main(void)
+{
+	int		fd = open("test.txt", O_RDONLY);
+	char	*line = NULL;
+	int		ret;
+
+	ret = 1;
+	while (ret)
+	{
+		ret = get_next_line(fd, &line);
+		if (line)
+			ft_putstr(line);
+		ft_putchar('\n');
+	}
+	close(fd);
+	return (0);
 }
