@@ -96,38 +96,9 @@ char	*ft_strafterfirstline(char *s1)
 	return (NULL);
 }
 
-char	*ft_strjoinSpecial(char const *s1, char const *s2)
-{
-	char	*new;
-	int		i;
-	int		j;
-
-	i = 0;
-	j = 0;
-	if (s1 && s2)
-	{
-		if (!(new = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1))))
-			return (NULL);
-		while (s1[i] != '\0')
-		{
-			new[i] = s1[i];
-			i++;
-		}
-		while (s2[j] != ' ' && s2[j])
-		{
-			new[i] = s2[j];
-			j++;
-			i++;
-		}
-		new[i] = '\0';
-		return (new);
-	}
-	return (NULL);
-}
-
 ////////////////////////////////////////////////////////////////
 
-int		get_next_line(const int fd, char **line, size_t buff_size)
+int		get_next_line(const int fd, char **line)
 {
 	static char		*repere = NULL;
 	int				ret;
@@ -135,23 +106,21 @@ int		get_next_line(const int fd, char **line, size_t buff_size)
 
 	ret = 1;
 	// init buff
-	if (!(buff = ft_memalloc(sizeof(char *) * buff_size + 1)))
+	if (!(buff = ft_memalloc(sizeof(char *) * BUFF_SIZE + 1)))
 		return (-1);
 	// init repere IF NULL
 	if (repere == NULL)
 	{
-		if (!(repere = ft_memalloc(sizeof(char *) * buff_size + 1)))
+		if (!(repere = ft_memalloc(sizeof(char *) * BUFF_SIZE + 1)))
 			return (-1);
 	}
 	free(*line);
 	*line = NULL;
 	// read and cp in buff
-	while(ret = read(fd, buff, buff_size))
+	while(ret = read(fd, buff, BUFF_SIZE))
 	{
 		// if \n exist in buff OR EOF cp and break
-		if (ret < buff_size)
-			break ;
-		if (ft_strchr(buff, '\n') != NULL)
+		if (ft_strchr(buff, '\n') != NULL || ret < BUFF_SIZE)
 		{
 			repere = ft_strjoin(repere, buff);
 			break ;
@@ -159,8 +128,8 @@ int		get_next_line(const int fd, char **line, size_t buff_size)
 		repere = ft_strjoin(repere, buff);
 	}
 	// Free buff if exist
-	if (ret < buff_size && ret > 0)
-		repere = ft_strjoinSpecial(repere, buff);
+	//if (ret < buff_size && ret > 0)
+	//	repere = ft_strjoinSpecial(repere, buff);
 	if (buff)
 	{
 		free(buff);
@@ -187,63 +156,14 @@ int		main(void)
 	char	*line = NULL;
 	int		ret;
 	size_t	my_size;
-/*
-	my_size = 1;
-	ret = 1;
-	while (ret)
-	{
-		ret = get_next_line(fd, &line, my_size);
-		printf("\n");
-	}
-	close(fd);
 
-	my_size = 2;
-	ret = 1;
-	while (ret)
-	{
-		ret = get_next_line(fd, &line, my_size);
-		printf("\n");
-	}
-	close(fd);
-
-	my_size = 10;
 	fd = open("test.txt", O_RDONLY);
 	ret = 1;
 	while (ret)
 	{
-		ret = get_next_line(fd, &line, my_size);
-		printf("\n");
-	}
-	close(fd);
-
-	my_size = 100;
-	fd = open("test.txt", O_RDONLY);
-	ret = 1;
-	while (ret)
-	{
-		ret = get_next_line(fd, &line, my_size);
+		ret = get_next_line(fd, &line);
 		ft_putchar('\n');
 	}
 	close(fd);
-*/
-	my_size = 403;
-	fd = open("test.txt", O_RDONLY);
-	ret = 1;
-	while (ret)
-	{
-		ret = get_next_line(fd, &line, my_size);
-		ft_putchar('\n');
-	}
-	close(fd);
-/*
-	my_size = 10000;
-	fd = open("test.txt", O_RDONLY);
-	ret = 1;
-	while (ret == 1)
-	{
-		ret = get_next_line(fd, &line, my_size);
-		ft_putchar('\n');
-	}
-	close(fd);*/
 	return (0);
 }
